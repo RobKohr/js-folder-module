@@ -18,7 +18,7 @@ function defaultConvert(filename) {
         .replace(/-([a-zA-Z])/g, (_, char) => char.toUpperCase())
 }
 
-function defaultIgnore(filename) {
+function defaultIgnore(filename, outFile) {
     return filename.includes('/')
         || filename.startsWith('--')
         || filename.startsWith('.')
@@ -26,7 +26,7 @@ function defaultIgnore(filename) {
 }
 
 function defaultOutFile(directory) {
-    return `./${ path.format(path.parse(directory)) }.js`
+    return `./${ path.format(path.parse(directory)) }/index.js`
 }
 
 function* files(directory) {
@@ -52,7 +52,7 @@ function folderModule(directory, options={}) {
 
     // Get rid of files that need to be ignored
     const inFiles = [...files(directory)]
-        .filter(fileName => !ignore(path.basename(fileName)))
+        .filter(fileName => !ignore(path.basename(fileName, outFile)))
 
     // Convert all filenames into
     const mappings = inFiles
